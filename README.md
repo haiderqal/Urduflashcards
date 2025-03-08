@@ -27,7 +27,7 @@ I want to make it where i can put a form and when you enter your guess it shows 
 
 Here's a walkthrough of implemented required features:
 
-![Flash Card](public/web102flash.gif)
+![Flash Card](https://raw.githubusercontent.com/haiderqal/Urduflashcards/main/public/web102flash.gif)
 
 GIF created with LICEcap
 
