@@ -4,6 +4,8 @@ import "./Card.css";
 const Card = () => {
   const [cards, setCards] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [userGuess, setUserGuess] = useState("");
+  const [feedbackClass, setFeedbackClass] = useState("none");
 
   const [cardPairs, setCardPairs] = useState([
     { title: "Welcome!", definition: "Click next to get started" },
@@ -22,30 +24,43 @@ const Card = () => {
   const showNextCard = () => {
     if (cards + 1 < cardPairs.length) {
       setCards(cards + 1);
-      setIsFlipped(false); // Reset flip state
+      setIsFlipped(false);
+      setUserGuess("");
+      setFeedbackClass("none");
     }
   };
 
   const showPrevCard = () => {
     if (cards > 0) {
       setCards(cards - 1);
-      setIsFlipped(false); // Reset flip state
+      setIsFlipped(false);
+      setUserGuess("");
+      setFeedbackClass("none");
     }
   };
 
   const handleShuffle = () => {
-    setCardPairs(
-      [cardPairs[0]].concat(
-        cardPairs.slice(1).sort(() => 0.5 - Math.random())
-      )
-    );
-    setIsFlipped(false); // Reset flip state after shuffle
+    setCardPairs([
+      cardPairs[0],
+      ...cardPairs.slice(1).sort(() => 0.5 - Math.random()),
+    ]);
+    setIsFlipped(false);
+    setUserGuess("");
+    setFeedbackClass("none");
+  };
+
+  const handleCheckAnswer = () => {
+    if (userGuess.trim().toLowerCase() === cardPairs[cards].definition.toLowerCase()) {
+      setFeedbackClass("correct");
+    } else {
+      setFeedbackClass("incorrect");
+    }
   };
 
   return (
     <div>
-      <div
-        className={`flip-card ${isFlipped ? "flipped" : ""}`}
+      <div 
+        className={`flip-card ${isFlipped ? "flipped" : ""} ${feedbackClass}`} 
         onClick={() => setIsFlipped(!isFlipped)}
       >
         <div className="flip-card-inner">
@@ -57,11 +72,17 @@ const Card = () => {
           </div>
         </div>
       </div>
-      <div>
-        <button onClick={showNextCard}>Next</button>
-        <button onClick={showPrevCard}>Prev</button>
-        <button onClick={handleShuffle}>Shuffle</button>
-      </div>
+
+      <input
+        type="text"
+        placeholder="Enter your guess"
+        value={userGuess}
+        onChange={(e) => setUserGuess(e.target.value)}
+      />
+      <button onClick={handleCheckAnswer}>Submit</button>
+      <button onClick={showPrevCard}>Prev</button>
+      <button onClick={showNextCard}>Next</button>
+      <button onClick={handleShuffle}>Shuffle</button>
     </div>
   );
 };
